@@ -117,7 +117,7 @@ function scrivivarie($mese, $anno, $mese1, $anno1) { //nuovi utenti, post e disc
 		$discussioni=$riga['t'];
 		$post=$riga['p'];
 	}
-	echo '<b>Varie</><table id="elenco"><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
+	echo '<b>Varie</b><table id="elenco"><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
 	echo '<tr><td>Nuove discussioni:</td><td>'.$discussioni.'</td></tr>';
 	echo '<tr><td>Nuovi post:</td><td>'.$post.'</td></tr></table>';
 }
