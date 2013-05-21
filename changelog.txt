@@ -5,3 +5,4 @@
 - ridotta dimensione carattere
 - aggiunte stat varie
 - aggiunte statistiche top 5 generali
+- aggiunti link
