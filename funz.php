@@ -99,6 +99,27 @@ function scrivimipiace($mese, $anno, $mese1, $anno1) { //top 10 "mi piace"
 		}
 		echo '</table>';
 	}
+	else
+		echo '<b>Statistiche "mi piace"<br />disponibili solo da maggio 2013</b>';
+}
+
+function scrivivarie($mese, $anno, $mese1, $anno1) {
+	connetti($db);
+	$query="SELECT sum(nuser) u, sum(npost) p, sum(nthread) t FROM vb_stats where dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01'))";
+	$result = seleziona($db, $query);
+	$n_righe = get_num_rows($result);
+	$registrati=0;
+	$discussioni=0;
+	$post=0;
+	if ($n_righe > 0) {
+		$riga = scorri_record($result);
+		$registrati=$riga['u'];
+		$discussioni=$riga['t'];
+		$post=$riga['p'];
+	}
+	echo '<table><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
+	echo '<tr><td>Nuove discussioni:</td><td>'.$discussioni.'</td></tr>';
+	echo '<tr><td>Nuovi post:</td><td>'.$post.'</td></tr></table>';
 }
 
 function periodi($mese,$anno,$tot) { //treeview periodi

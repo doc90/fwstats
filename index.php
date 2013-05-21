@@ -79,8 +79,11 @@ switch ($mese) {
 			</td>
 		</tr>
 		<tr>
-			<td align="center" colspan="3" id='elenco'>
+			<td align="center" colspan="2" id='elenco'>
 				<?php scrividiscussioni($mese, $anno, $mese1, $anno1); ?>
+			</td>
+			<td align="center" colspan="2" id='elenco'>
+				<?php scrivivarie($mese, $anno, $mese1, $anno1); ?>
 			</td>
 		</tr>
 		<tr>
