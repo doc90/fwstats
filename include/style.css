@@ -28,3 +28,8 @@ html {
 	font-size:10px;
 	font-family:monospace;
 }
+
+#header {
+	font-size:12px;
+	line-height:13px;
+}

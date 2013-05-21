@@ -66,7 +66,9 @@ switch ($mese) {
 			});
 		});
 	</script>
+	<div id='header'>
 	<a href="../">Home</a> - <a a href="#" onclick="alert('Lavori in corso')">Achievements</a> - <a href="../feedback-supporto-forum-7/7601-novita-statistiche-forgottenworld.html">Feedback</a>
+	</div>
 	<table width ='100%' cellpadding = '5px'>
 		<tr>
 			<td align="center" colspan="4">
