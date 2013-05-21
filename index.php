@@ -56,7 +56,7 @@ switch ($mese) {
 		});
 	</script>
 	
-	<table width ='100%' cellpadding = '10px'>
+	<table width ='100%' cellpadding = '5px'>
 		<tr>
 			<td align="center" colspan="4">
 				<b>Statistiche <?php if ($tot==0)
@@ -68,22 +68,43 @@ switch ($mese) {
 			<td align='left' valign="top" rowspan="2">
 				<?php periodi($mese, $anno, $tot); ?>
 			</td>
-			<td align='center' id='elenco'>
+			<td align='center'>
 				<?php scrivilistapost($mese, $anno, $mese1, $anno1); ?>
 			</td>
-			<td align='center' id='elenco'>
+			<td align='center'>
 				<?php scrivilistathread($mese, $anno, $mese1, $anno1); ?>
 			</td>
-			<td align='center' id='elenco'>
+			<td align='center'>
 				<?php scrivimipiace($mese, $anno, $mese1, $anno1); ?>
 			</td>
 		</tr>
 		<tr>
-			<td align="center" colspan="2" id='elenco'>
+			<td align="center" colspan="2">
 				<?php scrividiscussioni($mese, $anno, $mese1, $anno1); ?>
 			</td>
-			<td align="center" colspan="2" id='elenco'>
+			<td align="center">
 				<?php scrivivarie($mese, $anno, $mese1, $anno1); ?>
+			</td>
+		</tr>
+	</table>
+	<table width ='100%' cellpadding = '5px'>
+		<tr>
+			<td align="center" colspan="4">
+				<b>Top 5 generali</b>
+			</td>
+		</tr>
+		<tr>
+			<td align="center">
+				<?php scrivitop5listapost(); ?>
+			</td>
+			<td align="center">
+				<?php scrivitop5listathread(); ?>
+			</td>
+			<td align="center">
+				<?php scrivitop5mipiace(); ?>
+			</td>
+			<td align="center">
+				<?php scrivitop5sezioni(); ?>
 			</td>
 		</tr>
 		<tr>

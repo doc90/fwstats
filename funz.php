@@ -43,7 +43,7 @@ function scrivilistapost($mese, $anno, $mese1, $anno1) { //top 10 per numero pos
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
-		echo '<table>';
+		echo '<table id="elenco">';
 		echo '<tr><th>Username</th><th>Post scritti</th></tr>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
@@ -59,7 +59,7 @@ function scrivilistathread($mese, $anno, $mese1, $anno1) { //top 10 per numero d
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
-		echo '<table>';
+		echo '<table id="elenco">';
 		echo '<tr><th>Username</th><th>Thread aperti</th></tr>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
@@ -75,7 +75,7 @@ function scrividiscussioni($mese, $anno, $mese1, $anno1) { //top 10 discussioni 
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
-		echo '<table>';
+		echo '<table id="elenco">';
 		echo '<tr><th>Username</th><th>Thread</th><th>Reply</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
@@ -91,11 +91,11 @@ function scrivimipiace($mese, $anno, $mese1, $anno1) { //top 10 "mi piace"
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
-		echo '<table>';
+		echo '<table id="elenco">';
 		echo '<tr><th>Username</th><th>"Mi piace" ricevuti</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
-			echo '<tr><td>' . $riga['username'] . '</td><td>' . trunc($riga['n'],50) . '</td></tr>';
+			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['n'] . '</td></tr>';
 		}
 		echo '</table>';
 	}
@@ -103,7 +103,7 @@ function scrivimipiace($mese, $anno, $mese1, $anno1) { //top 10 "mi piace"
 		echo '<b>Statistiche "mi piace"<br />disponibili solo da maggio 2013</b>';
 }
 
-function scrivivarie($mese, $anno, $mese1, $anno1) {
+function scrivivarie($mese, $anno, $mese1, $anno1) { //nuovi utenti, post e discussioni
 	connetti($db);
 	$query="SELECT sum(nuser) u, sum(npost) p, sum(nthread) t FROM vb_stats where dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01'))";
 	$result = seleziona($db, $query);
@@ -117,9 +117,75 @@ function scrivivarie($mese, $anno, $mese1, $anno1) {
 		$discussioni=$riga['t'];
 		$post=$riga['p'];
 	}
-	echo '<table><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
+	echo '<b>Varie</><table id="elenco"><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
 	echo '<tr><td>Nuove discussioni:</td><td>'.$discussioni.'</td></tr>';
 	echo '<tr><td>Nuovi post:</td><td>'.$post.'</td></tr></table>';
+}
+
+function scrivitop5sezioni() { //top 5 sezioni per visite
+	connetti($db);
+	$query="SELECT f.title tt ,sum(`views`) v FROM `vb_thread` t left join vb_forum f on t.forumid=f.forumid group by f.title order by v desc limit 5";
+	$result = seleziona($db, $query);
+	$n_righe = get_num_rows($result);
+	if ($n_righe > 0) {
+		echo '<table id="elenco">';
+		echo '<tr><th>Sezione</th><th>Visite</th>';
+		for ($i = 0; $i < $n_righe; $i++) {
+			$riga = scorri_record($result);
+			echo '<tr><td>' . $riga['tt'] . '</td><td>' .$riga['v'] . '</td></tr>';
+		}
+		echo '</table>';
+	}
+}
+
+function scrivitop5mipiace() { //top 5 "mi piace"
+	connetti($db);
+	$query="SELECT username, count(*) n FROM vb_vbseo_likes left join vb_user on l_dest_userid=userid where username<>'' and userid<>770 group by username order by n desc limit 5";
+	$result = seleziona($db, $query);
+	$n_righe = get_num_rows($result);
+	if ($n_righe > 0) {
+		echo '<table id="elenco">';
+		echo '<tr><th>Username</th><th>"Mi piace" ricevuti</th>';
+		for ($i = 0; $i < $n_righe; $i++) {
+			$riga = scorri_record($result);
+			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['n'] . '</td></tr>';
+		}
+		echo '</table>';
+	}
+	else
+		echo '<b>Statistiche "mi piace"<br />disponibili solo da maggio 2013</b>';
+}
+
+function scrivitop5listathread() { //top 5 per numero discussioni
+	connetti($db);
+	$query = "SELECT postusername, count(*) thread FROM `vb_thread` where postusername<>'' and postuserid<>770 group by postusername order by thread desc limit 5";
+	$result = seleziona($db, $query);
+	$n_righe = get_num_rows($result);
+	if ($n_righe > 0) {
+		echo '<table id="elenco">';
+		echo '<tr><th>Username</th><th>Thread aperti</th></tr>';
+		for ($i = 0; $i < $n_righe; $i++) {
+			$riga = scorri_record($result);
+			echo '<tr><td>' . $riga['postusername'] . '</td><td>' . $riga['thread'] . '</td></tr>';
+		}
+		echo '</table>';
+	}
+}
+
+function scrivitop5listapost() { //top 5 per numero post
+	connetti($db);
+	$query = "SELECT username, count(*) post FROM vb_post WHERE username<>'' and userid<>770 group by username order by post desc limit 5";
+	$result = seleziona($db, $query);
+	$n_righe = get_num_rows($result);
+	if ($n_righe > 0) {
+		echo '<table id="elenco">';
+		echo '<tr><th>Username</th><th>Post scritti</th></tr>';
+		for ($i = 0; $i < $n_righe; $i++) {
+			$riga = scorri_record($result);
+			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['post'] . '</td></tr>';
+		}
+		echo '</table>';
+	}
 }
 
 function periodi($mese,$anno,$tot) { //treeview periodi

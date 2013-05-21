@@ -2,3 +2,6 @@
 - creato changelog
 - aggiunte statistiche su nuovi utenti, nuovi post e nuove discussioni
 - fix su spazio vuoto nelle statistiche "mi piace"
+- ridotta dimensione carattere
+- aggiunte stat varie
+- aggiunte statistiche top 5 generali
