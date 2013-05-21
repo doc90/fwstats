@@ -1,9 +1,16 @@
 <?php
-include("../includes/config.php");
+include("../includes/config.php"); //config di vbulletin
+
 $host=$config['MasterServer']['servername'];
 $user=$config['MasterServer']['username'];
 $pass=$config['MasterServer']['password'];
 $nomedb=$config['Database']['dbname'];
+
+
+//////////////////////////////
+// Funzioni niubbe database //
+//////////////////////////////
+
 function connetti(&$db) {
 	global $host, $user, $pass, $nomedb;
 	$db = new mysqli($host, $user, $pass, $nomedb);
@@ -25,7 +32,12 @@ function scorri_record($result) {
 	return $result -> fetch_assoc();
 }
 
-function scrivilistapost($mese, $anno, $mese1, $anno1) {
+
+//////////////////////////////
+// Funzioni creazione liste //
+//////////////////////////////
+
+function scrivilistapost($mese, $anno, $mese1, $anno1) { //top 10 per numero post
 	connetti($db);
 	$query = "SELECT username, count(*) post FROM vb_post WHERE dateline >= unix_timestamp(DATE('" . $anno . "-" . $mese . "-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and username<>'' and userid<>770 group by username order by post desc limit 10";
 	$result = seleziona($db, $query);
@@ -41,7 +53,7 @@ function scrivilistapost($mese, $anno, $mese1, $anno1) {
 	}
 }
 
-function scrivilistathread($mese, $anno, $mese1, $anno1) {
+function scrivilistathread($mese, $anno, $mese1, $anno1) { //top 10 per numero discussioni
 	connetti($db);
 	$query = "SELECT postusername, count(*) thread FROM `vb_thread` WHERE dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and postusername<>'' and postuserid<>770 group by postusername order by thread desc limit 10";
 	$result = seleziona($db, $query);
@@ -57,7 +69,7 @@ function scrivilistathread($mese, $anno, $mese1, $anno1) {
 	}
 }
 
-function scrividiscussioni($mese, $anno, $mese1, $anno1) {
+function scrividiscussioni($mese, $anno, $mese1, $anno1) { //top 10 discussioni per reply
 	connetti($db);
 	$query="select title, postusername, replycount from vb_thread where dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and postusername<>'' and postuserid<>770 order by replycount desc limit 10";
 	$result = seleziona($db, $query);
@@ -73,7 +85,7 @@ function scrividiscussioni($mese, $anno, $mese1, $anno1) {
 	}
 }
 
-function scrivimipiace($mese, $anno, $mese1, $anno1) {
+function scrivimipiace($mese, $anno, $mese1, $anno1) { //top 10 "mi piace"
 	connetti($db);
 	$query="SELECT username, count(*) n FROM vb_vbseo_likes left join vb_user on l_dest_userid=userid where l_dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and l_dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and username<>'' and userid<>770 group by username order by n desc limit 10";
 	$result = seleziona($db, $query);
@@ -89,7 +101,7 @@ function scrivimipiace($mese, $anno, $mese1, $anno1) {
 	}
 }
 
-function periodi($mese,$anno,$tot) {
+function periodi($mese,$anno,$tot) { //treeview periodi
 	connetti($db);
 	$query = "select distinct year(from_unixtime(`dateline`)) a from vb_post order by a desc";
 	$result = seleziona($db, $query);
@@ -126,6 +138,11 @@ function periodi($mese,$anno,$tot) {
 	}
 }
 
+
+/////////////
+// Utility //
+/////////////
+
 function mese_desc($i) {
 	switch ($i) {
 		case 1: return 'Gennaio';    break;
@@ -145,7 +162,7 @@ function mese_desc($i) {
 	}
 }
 
-function trunc($s, $l) {
+function trunc($s, $l) { //se $s è più lunga di $l caratteri la tronca e ci aggiunge '...'
 	if (strlen($s) > $l) 
 		$r=substr($s,0,($l-3)).'...'; 
 	else

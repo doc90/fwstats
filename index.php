@@ -3,16 +3,16 @@ include('funz.php');
 if ((isset($_GET['mese'])) && (isset($_GET['anno']))) {
 	$mese=(int)$_GET['mese'];
 	$anno=(int)$_GET['anno'];
-	if (($mese<0)||($mese>12)||($anno<2010)||($anno>Date("Y"))) {
+	if (($mese<0)||($mese>12)||($anno<2010)||($anno>Date("Y"))) { //antifurbo 1
 		echo '<script>alert("Lascia stare...");location.href = "/fwstats/";</script>';
 		exit;
 	}
-	if (($anno==date("Y")) & ($mese>date("n"))) {
+	if (($anno==date("Y")) & ($mese>date("n"))) { //antifurbo 2
 		echo '<script>alert("Eh, mica possiamo predire il futuro...");location.href = "/fwstats/";</script>';
 		exit;
 	}
 }	
-else { //ultimo mese
+else { //se nessuna data è specificata allora prendo in automatico l'ultimo mese
 	$mese=date("n");
 	$anno=date("Y");
 }
@@ -45,7 +45,7 @@ switch ($mese) {
 	<script src="include/jquery.treeview.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-		$(function() {
+		$(function() { //http://jquery.bassistance.de/treeview/demo/
 			$("#tree").treeview({
 				collapsed: true,
 				animated: "fast",
