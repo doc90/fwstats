@@ -1,0 +1,4 @@
+21-05-2013
+- creato changelog
+- aggiunte statistiche su nuovi utenti, nuovi post e nuove discussioni
+- fix su spazio vuoto nelle statistiche "mi piace"

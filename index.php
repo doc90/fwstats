@@ -88,7 +88,7 @@ switch ($mese) {
 		</tr>
 		<tr>
 			<td align="right" colspan="4" id='footer'>
-				By <a href="http://www.forgottenworld.it/members/doc.html">Doc</a> - <a href="https://github.com/doc90/fwstats">GitHub</a>
+				By <a href="http://www.forgottenworld.it/members/doc.html">Doc</a> - <a href="https://github.com/doc90/fwstats">GitHub</a> - <a href="changelog.txt">Changelog</a>
 			</td>
 		</tr>
 	</table>
