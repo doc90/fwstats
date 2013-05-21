@@ -1,0 +1,30 @@
+@charset "utf-8";
+/* CSS Document */
+
+a {
+	color:#00F;
+	text-decoration:none;
+}
+
+a:hover {
+	color: #808080;
+	text-decoration: underline;
+	cursor:pointer;
+}
+
+html {
+	padding-top:10px;
+	bottom:20px;
+}
+
+#elenco {
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:#333333;
+	line-height:14px;
+}
+
+#footer {
+	font-size:10px;
+	font-family:monospace;
+}
