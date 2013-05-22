@@ -26,19 +26,18 @@ function carica(mese,anno) {
 			});
 			$('#topthread').fadeIn();
 			$('#topmipiace').fadeOut();
-			try{
-				$.getJSON("data.php?t=3&mese="+mese+"&anno="+anno, function(jsonData){
+			$.getJSON("data.php?t=3&mese="+mese+"&anno="+anno, function(jsonData){
+				if($.isEmptyObject(jsonData)) 
+					t='<b>Le statistiche "mi piace"<br />sono disponibili a partire da maggio 2013';
+				else {
 					t='<table id="elenco"><tr><th>Username</th><th>"Mi piace" ricevuti</th></tr>';
 					$.each(jsonData, function(i, data) {
 									t+='<tr><td>'+data.username+'</td><td>'+data.mipiace+'</td></tr>';									
 					});
 					t+='</table>';
-					$('#topmipiace').html(t);
-				});
-			}
-			catch(e){
-				$('#topmipiace').html('<b>Le statistiche "mi piace"<br />sono disponibili a partire da maggio 2013');
 				}
+				$('#topmipiace').html(t);
+			});	
 			$('#topmipiace').fadeIn();
 			$('#topreply').fadeOut();
 			$.getJSON("data.php?t=4&mese="+mese+"&anno="+anno, function(jsonData){

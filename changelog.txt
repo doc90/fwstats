@@ -1,6 +1,7 @@
 22-05-2013
 - parziale riscrittura del codice
 - esecuzione asincrona delle ricerche
+- aggiunto fadein e fadeout
 
 21-05-2013
 - creato changelog
