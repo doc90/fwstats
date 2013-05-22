@@ -1,3 +1,7 @@
+22-05-2013
+- parziale riscrittura del codice
+- esecuzione asincrona delle ricerche
+
 21-05-2013
 - creato changelog
 - aggiunte statistiche su nuovi utenti, nuovi post e nuove discussioni

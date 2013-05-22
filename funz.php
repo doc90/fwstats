@@ -42,14 +42,13 @@ function scrivilistapost($mese, $anno, $mese1, $anno1) { //top 10 per numero pos
 	$query = "SELECT username, count(*) post FROM vb_post WHERE dateline >= unix_timestamp(DATE('" . $anno . "-" . $mese . "-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and username<>'' and userid<>770 group by username order by post desc limit 10";
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
+	$arr=array();
 	if ($n_righe > 0) {
-		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>Post scritti</th></tr>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
-			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['post'] . '</td></tr>';
+			$arr[]=array('username' => $riga['username'], 'post' => $riga['post']);
 		}
-		echo '</table>';
+		echo json_encode($arr);
 	}
 }
 
@@ -58,14 +57,13 @@ function scrivilistathread($mese, $anno, $mese1, $anno1) { //top 10 per numero d
 	$query = "SELECT postusername, count(*) thread FROM `vb_thread` WHERE dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and postusername<>'' and postuserid<>770 group by postusername order by thread desc limit 10";
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
+	$arr=array();
 	if ($n_righe > 0) {
-		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>Thread aperti</th></tr>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
-			echo '<tr><td>' . $riga['postusername'] . '</td><td>' . $riga['thread'] . '</td></tr>';
+			$arr[]=array('username' => $riga['postusername'], 'thread' => $riga['thread']);
 		}
-		echo '</table>';
+		echo json_encode($arr);
 	}
 }
 
@@ -74,14 +72,13 @@ function scrividiscussioni($mese, $anno, $mese1, $anno1) { //top 10 discussioni 
 	$query="select title, postusername, replycount from vb_thread where dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and postusername<>'' and postuserid<>770 order by replycount desc limit 10";
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
+	$arr=array();
 	if ($n_righe > 0) {
-		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>Thread</th><th>Reply</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
-			echo '<tr><td>' . $riga['postusername'] . '</td><td>' . trunc($riga['title'],50) . '</td><td>' . $riga['replycount'] . '</td></tr>';
+			$arr[]=array('username' => $riga['postusername'], 'title' => trunc($riga['title'],50), 'reply' => $riga['replycount']);
 		}
-		echo '</table>';
+		echo json_encode($arr);
 	}
 }
 
@@ -90,17 +87,16 @@ function scrivimipiace($mese, $anno, $mese1, $anno1) { //top 10 "mi piace"
 	$query="SELECT username, count(*) n FROM vb_vbseo_likes left join vb_user on l_dest_userid=userid where l_dateline >= unix_timestamp(DATE('".$anno."-".$mese."-01')) and l_dateline < unix_timestamp(DATE('" . $anno1 . "-" . ($mese1) . "-01')) and username<>'' and userid<>770 group by username order by n desc limit 10";
 	$result = seleziona($db, $query);
 	$n_righe = get_num_rows($result);
+	$arr=array();
 	if ($n_righe > 0) {
-		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>"Mi piace" ricevuti</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
-			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['n'] . '</td></tr>';
+			$arr[]=array('username' => $riga['username'], 'mipiace' => $riga['n']);
 		}
-		echo '</table>';
+		echo json_encode($arr);
 	}
-	else
-		echo '<b>Statistiche "mi piace"<br />disponibili solo da maggio 2013</b>';
+	//else
+	//	echo '<b>Statistiche "mi piace"<br />disponibili solo da maggio 2013</b>';
 }
 
 function scrivivarie($mese, $anno, $mese1, $anno1) { //nuovi utenti, post e discussioni
@@ -117,9 +113,11 @@ function scrivivarie($mese, $anno, $mese1, $anno1) { //nuovi utenti, post e disc
 		$discussioni=$riga['t'];
 		$post=$riga['p'];
 	}
-	echo '<b>Varie</b><table id="elenco"><tr><td>Nuovi utenti:</td><td>'.$registrati.'</td></tr>';
-	echo '<tr><td>Nuove discussioni:</td><td>'.$discussioni.'</td></tr>';
-	echo '<tr><td>Nuovi post:</td><td>'.$post.'</td></tr></table>';
+	$arr=array();
+	$arr[]=array('desc' => 'Nuovi utenti:', 'n' => $registrati);
+	$arr[]=array('desc' => 'Nuove discussioni:', 'n' => $discussioni);
+	$arr[]=array('desc' => 'Nuovi post:', 'n' => $post);
+	echo json_encode($arr);
 }
 
 function scrivitop5sezioni() { //top 5 sezioni per visite
@@ -163,7 +161,7 @@ function scrivitop5listathread() { //top 5 per numero discussioni
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
 		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>Thread aperti</th></tr>';
+		echo '<tr><th>Utente</th><th>Thread aperti</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
 			echo '<tr><td>' . $riga['postusername'] . '</td><td>' . $riga['thread'] . '</td></tr>';
@@ -179,7 +177,7 @@ function scrivitop5listapost() { //top 5 per numero post
 	$n_righe = get_num_rows($result);
 	if ($n_righe > 0) {
 		echo '<table id="elenco">';
-		echo '<tr><th>Username</th><th>Post scritti</th></tr>';
+		echo '<tr><th>Utente</th><th>Post scritti</th>';
 		for ($i = 0; $i < $n_righe; $i++) {
 			$riga = scorri_record($result);
 			echo '<tr><td>' . $riga['username'] . '</td><td>' . $riga['post'] . '</td></tr>';
@@ -204,19 +202,11 @@ function periodi($mese,$anno,$tot) { //treeview periodi
 			$n_righe2 = get_num_rows($result2);
 			if ($n_righe2>0) {
 				echo '<li class="expandable"><div class="hitarea expandable-hitarea"></div> ';
-				if ((int)$anni['a']==$anno)
-					echo '<a href="index.php?mese=0&anno='.$anni['a'].'"><b>'.$anni['a'].'</b></a>';
-				else 
-					echo '<a href="index.php?mese=0&anno='.$anni['a'].'">'.$anni['a'].'</a>';
+				echo '<a onclick="carica(0,'.$anni['a'].')">'.$anni['a'].'</a>';
 				echo '<ul style="display: none;">';
 				for ($z=0; $z<$n_righe2; $z++) {
 					$mesi=scorri_record($result2);
-					if ($tot==0 && (((int)$mesi['m']==$mese) && ((int)$anni['a']==$anno))){
-						echo '<li><a href="index.php?mese='.$mesi['m'].'&anno='.$anni['a'].'"><b>'.mese_desc($mesi['m']).'</b></a></li>';
-						}
-					else {
-						echo '<li><a href="index.php?mese='.$mesi['m'].'&anno='.$anni['a'].'">'.mese_desc($mesi['m']).'</a></li>';
-						}
+					echo '<li><a onclick="carica('.$mesi['m'].','.$anni['a'].')">'.mese_desc($mesi['m']).'</a></li>';
 				}
 				echo '</ul></li>';
 			}
@@ -232,6 +222,7 @@ function periodi($mese,$anno,$tot) { //treeview periodi
 
 function mese_desc($i) {
 	switch ($i) {
+		case 0: return '';    		 break;
 		case 1: return 'Gennaio';    break;
 		case 2: return 'Febbraio';   break;
 		case 3: return 'Marzo';      break;
@@ -255,6 +246,19 @@ function trunc($s, $l) { //se $s è più lunga di $l caratteri la tronca e ci ag
 	else
 		$r=$s;
 	return $r;
+}
+
+function antifurbo($mese,$anno) {
+
+		if (($mese<0)||($mese>12)||($anno<2010)||($anno>Date("Y"))) { //antifurbo 1
+			echo '<script>alert("Lascia stare...");location.href = "/fwstats/";</script>';
+			exit;
+		}
+		if (($anno==date("Y")) & ($mese>date("n"))) { //antifurbo 2
+			echo '<script>alert("Eh, mica possiamo predire il futuro...");location.href = "/fwstats/";</script>';
+			exit;
+		}
+	
 }
 
 ?>

@@ -3,14 +3,7 @@ include('funz.php');
 if ((isset($_GET['mese'])) && (isset($_GET['anno']))) {
 	$mese=(int)$_GET['mese'];
 	$anno=(int)$_GET['anno'];
-	if (($mese<0)||($mese>12)||($anno<2010)||($anno>Date("Y"))) { //antifurbo 1
-		echo '<script>alert("Lascia stare...");location.href = "/fwstats/";</script>';
-		exit;
-	}
-	if (($anno==date("Y")) & ($mese>date("n"))) { //antifurbo 2
-		echo '<script>alert("Eh, mica possiamo predire il futuro...");location.href = "/fwstats/";</script>';
-		exit;
-	}
+	antifurbo($mese,$anno);
 }	
 else { //se nessuna data è specificata allora prendo in automatico l'ultimo mese
 	$mese=date("n");
@@ -42,6 +35,7 @@ switch ($mese) {
 	<link rel="stylesheet" type="text/css" href="include/style.css" />
 	<link rel="stylesheet" href="include/jquery.treeview.css" />
 	<script src="include/jquery.js" type="text/javascript"></script>
+	<script src="include/funz.js" type="text/javascript"></script>
 	<script src="include/jquery.treeview.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
@@ -65,6 +59,10 @@ switch ($mese) {
 				persist: "location"
 			});
 		});
+		$(document).ready(function() {
+			carica(<?php echo $mese.','.$anno; ?>);
+		});
+		
 	</script>
 	<div id='header'>
 	<a href="../">Home</a> - <a onclick="alert('Lavori in corso')">Achievements</a> - <a href="../feedback-supporto-forum-7/7601-novita-statistiche-forgottenworld.html">Feedback</a>
@@ -72,9 +70,7 @@ switch ($mese) {
 	<table width ='100%' cellpadding = '5px'>
 		<tr>
 			<td align="center" colspan="4">
-				<b>Statistiche <?php if ($tot==0)
-						echo mese_desc($mese).' ';
-					echo $anno;?></b>
+				<b>Statistiche <span id="p"></span></b>
 			</td>
 		</tr>
 		<tr>
@@ -82,21 +78,21 @@ switch ($mese) {
 				<?php periodi($mese, $anno, $tot); ?>
 			</td>
 			<td align='center'>
-				<?php scrivilistapost($mese, $anno, $mese1, $anno1); ?>
+				<div id="toppost"></div>
 			</td>
 			<td align='center'>
-				<?php scrivilistathread($mese, $anno, $mese1, $anno1); ?>
+				<div id="topthread"></div>
 			</td>
 			<td align='center'>
-				<?php scrivimipiace($mese, $anno, $mese1, $anno1); ?>
+				<div id="topmipiace"></div>
 			</td>
 		</tr>
 		<tr>
 			<td align="center" colspan="2">
-				<?php scrividiscussioni($mese, $anno, $mese1, $anno1); ?>
+				<div id="topreply"></div>
 			</td>
 			<td align="center">
-				<?php scrivivarie($mese, $anno, $mese1, $anno1); ?>
+				<div id="topvarie"></div>
 			</td>
 		</tr>
 	</table>
