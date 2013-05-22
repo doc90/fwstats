@@ -17,7 +17,7 @@ function carica(mese,anno) {
 			$('#toppost').fadeIn();
 			$('#topthread').fadeOut();
 			$.getJSON("data.php?t=2&mese="+mese+"&anno="+anno, function(jsonData){
-				t='<table id="elenco"><tr><th>Username</th><th>Tread aperti</th></tr>';
+				t='<table id="elenco"><tr><th>Username</th><th>Thread aperti</th></tr>';
 				$.each(jsonData, function(i, data) {
 								t+='<tr><td>'+data.username+'</td><td>'+data.thread+'</td></tr>';									
 				});
@@ -42,7 +42,7 @@ function carica(mese,anno) {
 			$('#topmipiace').fadeIn();
 			$('#topreply').fadeOut();
 			$.getJSON("data.php?t=4&mese="+mese+"&anno="+anno, function(jsonData){
-				t='<table id="elenco"><tr><th>Username</th><th>Trhead</th><th>Reply</th></tr>';
+				t='<table id="elenco"><tr><th>Username</th><th>Thread</th><th>Reply</th></tr>';
 				$.each(jsonData, function(i, data) {
 								t+='<tr><td>'+data.username+'</td><td>'+data.title+'</td><td>'+data.reply+'</td></tr>';									
 				});
